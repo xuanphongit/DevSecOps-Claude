@@ -1,0 +1,400 @@
+# DevSecOps Azure Learning Journey - .gitignore
+# Comprehensive ignore patterns for .NET, Python, Docker, Azure, and security tools
+
+# ============================================
+# .NET / C# / Visual Studio
+# ============================================
+## Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+## Visual Studio cache/options
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+## MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+## .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+*.nupkg
+*.snupkg
+
+## Rider
+.idea/
+*.sln.iml
+
+# ============================================
+# Python
+# ============================================
+## Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+## Virtual environments
+venv/
+env/
+ENV/
+.venv
+env.bak/
+venv.bak/
+
+## Distribution / packaging
+dist/
+build/
+*.egg-info/
+.eggs/
+
+## PyInstaller
+*.manifest
+*.spec
+
+# ============================================
+# Secrets & Sensitive Data
+# ============================================
+## Secrets baseline (contains hashes, not actual secrets)
+# .secrets.baseline  # Keep this - it's safe to commit
+
+## Actual secrets (NEVER commit these)
+*.key
+*.pem
+*.p12
+*.pfx
+*.cer
+*.crt
+*.p7b
+*.p7c
+*.p7s
+*.jks
+*.keystore
+*.env
+*.env.local
+*.env.*.local
+secrets.json
+appsettings.Development.json
+appsettings.Production.json
+appsettings.*.json
+!appsettings.json  # Keep base appsettings.json
+
+## Azure credentials
+.azure/
+azure-credentials.json
+azure-credentials.xml
+*.publishsettings
+
+## Connection strings
+connectionstrings.json
+*.connectionstring
+
+## API Keys
+*apikey*.json
+*api-key*.json
+*apikey*.txt
+*api-key*.txt
+
+# ============================================
+# Docker
+# ============================================
+## Docker build context
+.dockerignore
+
+## Docker volumes
+docker-volumes/
+
+# ============================================
+# Kubernetes
+# ============================================
+## Kubeconfig files (may contain credentials)
+kubeconfig
+kubeconfig.*
+*.kubeconfig
+!kubeconfig.template
+
+## Helm
+.helm/
+charts/*.tgz
+
+# ============================================
+# Security Tools Output
+# ============================================
+## Trivy
+trivy-report.json
+trivy-report.html
+trivy-results/
+
+## Snyk
+.snyk
+snyk-report.json
+
+## SonarQube
+.sonar/
+.sonarqube/
+.scannerwork/
+
+## CodeQL
+.codeql/
+codeql-database/
+
+## TruffleHog
+trufflehog-results.json
+
+## SBOM
+sbom-*.json
+!sbom-template.json
+
+## Security scan results
+security-report*.json
+security-report*.html
+vulnerability-report*.json
+
+# ============================================
+# CI/CD
+# ============================================
+## Azure DevOps
+.azure-pipelines/
+*.pipeline
+
+## GitHub Actions (keep workflows, ignore local runs)
+.github/workflows/.cache/
+
+## Local CI/CD artifacts
+ci-artifacts/
+cd-artifacts/
+
+# ============================================
+# IDE & Editors
+# ============================================
+## VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+## Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## JetBrains Rider
+.idea/
+*.sln.iml
+
+## Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+## Vim
+*.swp
+*.swo
+*~
+
+## Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+
+# ============================================
+# OS Files
+# ============================================
+## Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+## macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+## Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ============================================
+# Logs & Temporary Files
+# ============================================
+## Logs
+*.log
+logs/
+*.log.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+## Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+.cache/
+
+## OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ============================================
+# Build & Package Managers
+# ============================================
+## NuGet
+*.nupkg
+*.snupkg
+**/packages/*
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+project.lock.json
+project.fragment.lock.json
+
+## Node.js (if used for tooling)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# ============================================
+# Testing
+# ============================================
+## Test results
+TestResults/
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+*.lcov
+
+## NUnit
+*.VisualState.xml
+TestResult.xml
+nunit-*.xml
+
+# ============================================
+# Documentation Build
+# ============================================
+## Generated documentation
+docs/_build/
+site/
+_site/
+
+# ============================================
+# Azure Specific
+# ============================================
+## Azure CLI
+.azure/
+
+## Azure Functions
+local.settings.json
+
+## Terraform (if used)
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+terraform.tfvars
+*.tfvars
+!terraform.tfvars.example
+
+## Bicep (if used)
+*.bicep.bak
+
+# ============================================
+# Project Specific
+# ============================================
+## Project artifacts
+projects/*/bin/
+projects/*/obj/
+projects/*/out/
+projects/*/.vs/
+
+## Local development
+local/
+.local/
+*.local
+
+## Backup files
+*.backup
+*.old
+*.orig
+
+# ============================================
+# Pre-commit
+# ============================================
+## Pre-commit cache (optional - can be committed)
+# .pre-commit-config.yaml  # Keep this - it should be committed
+
+# ============================================
+# Notes
+# ============================================
+# Files that SHOULD be committed:
+# - .pre-commit-config.yaml
+# - .secrets.baseline (contains hashes, not actual secrets)
+# - appsettings.json (base config without secrets)
+# - Dockerfile
+# - .github/workflows/*.yml
+# - azure-pipelines.yml
+# - *.csproj
+# - *.sln
