@@ -26,23 +26,24 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Restore dependencies
-        working-directory: ./projects
-        run: dotnet restore
+        run: dotnet restore "DevSecOps Claude.sln"
 
       - name: Build application
-        working-directory: ./projects
-        run: dotnet build --no-restore -c Release
+        run: dotnet build "DevSecOps Claude.sln" --no-restore -c Release
 
       - name: Run unit tests
-        working-directory: ./projects
-        run: dotnet test --no-build -c Release --collect:"XPlat Code Coverage" --results-directory ./TestResults
+        run: |
+          dotnet test "DevSecOps Claude.sln" \
+            --no-build -c Release \
+            --collect:"XPlat Code Coverage" \
+            --results-directory ./TestResults
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-results
-          path: projects/**/TestResults/**/*
+          path: TestResults/**/*
           retention-days: 30
 
   build-docker-image:
@@ -83,4 +84,5 @@ jobs:
 
       - name: Image digest
         run: |
-          echo "Image pushed to ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
+          IMAGE_TAG="${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
+          echo "Image pushed to $IMAGE_TAG"
