@@ -222,13 +222,34 @@ jobs:
           echo "Please review the Trivy scan results above"
           exit 1
 
-      # Only push if scan passes (security gate)
+      # Only push to GHCR on push to master (after merge), not on PR
       - name: Push Docker image to GHCR
-        if: steps.trivy-scan.outcome == 'success'
-        run: |
-          docker push ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        if: |
+          github.event_name == 'push' &&
+          (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main') &&
+          steps.trivy-scan.outcome == 'success'
+        uses: docker/build-push-action@v6
+        with:
+          context: ./projects
+          file: ./projects/SecureShop.API/Dockerfile
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          cache-from: type=local,src=/tmp/.buildx-cache
 
+      # Info message for PR (no push)
+      - name: PR scan complete (no push)
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "✅ Security scan completed on PR"
+          echo "Image will be pushed to GHCR after merge to master"
+
+      # Info message for push to master
       - name: Image digest
+        if: |
+          github.event_name == 'push' &&
+          (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main') &&
+          steps.trivy-scan.outcome == 'success'
         run: |
           IMAGE_TAG="${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
           echo "Image pushed to $IMAGE_TAG"
