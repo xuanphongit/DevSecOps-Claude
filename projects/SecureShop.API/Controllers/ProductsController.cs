@@ -70,10 +70,7 @@ public class ProductsController : ControllerBase
     public async Task<ActionResult<Product>> CreateProduct([FromBody] CreateProductRequest request)
     {
         // Security: Sanitize user input before logging to prevent log injection
-        var sanitizedRawName = (request.Name ?? string.Empty)
-            .Replace("\r", string.Empty)
-            .Replace("\n", string.Empty);
-        var sanitizedName = HtmlEncoder.Default.Encode(sanitizedRawName);
+        var sanitizedName = HtmlEncoder.Default.Encode(request.Name);
         _logger.LogInformation("POST /api/products - Creating new product: {ProductName}", sanitizedName);
 
         if (!ModelState.IsValid)
