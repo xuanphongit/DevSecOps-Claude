@@ -63,7 +63,7 @@ jobs:
           dotnet build projects/SecureShop.Tests/SecureShop.Tests.csproj --no-restore -c Release
 
       - name: Run unit tests
-        if: ${{ !inputs.skip_tests || github.event_name != 'workflow_dispatch' }}
+        if: ${{ github.event_name != 'workflow_dispatch' || !inputs.skip_tests }}
         run: |
           echo "=== Running unit tests ==="
           dotnet test projects/SecureShop.Tests/SecureShop.Tests.csproj \
