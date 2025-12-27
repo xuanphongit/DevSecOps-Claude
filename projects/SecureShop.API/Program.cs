@@ -75,9 +75,20 @@ try
     Log.Information("Starting SecureShop API");
     app.Run();
 }
+catch (System.Reflection.TargetInvocationException ex)
+{
+    Log.Fatal(ex, "Application terminated unexpectedly due to dependency injection failure");
+    throw;
+}
+catch (System.InvalidOperationException ex)
+{
+    Log.Fatal(ex, "Application terminated unexpectedly due to configuration error");
+    throw;
+}
 catch (Exception ex)
 {
     Log.Fatal(ex, "Application terminated unexpectedly");
+    throw;
 }
 finally
 {
