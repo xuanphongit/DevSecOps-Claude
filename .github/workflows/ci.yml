@@ -109,13 +109,22 @@ jobs:
         with:
           sarif_file: 'trivy-fs-results.sarif'
 
-      # Secret Scanning - TruffleHog
-      - name: Run TruffleHog secret scan
+      # Secret Scanning - TruffleHog (PR: diff scan)
+      - name: Run TruffleHog secret scan (PR)
+        if: github.event_name == 'pull_request'
         uses: trufflesecurity/trufflehog@main
         with:
           path: ./
-          base: ${{ github.event.pull_request.base.sha || github.event.before }}
-          head: ${{ github.event.pull_request.head.sha || github.sha }}
+          base: ${{ github.event.pull_request.base.sha }}
+          head: ${{ github.event.pull_request.head.sha }}
+          extra_args: --only-verified
+
+      # Secret Scanning - TruffleHog (Push: full repo scan)
+      - name: Run TruffleHog full repo scan (Push)
+        if: github.event_name == 'push'
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
           extra_args: --only-verified
 
   build-docker-image:
