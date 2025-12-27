@@ -96,7 +96,7 @@ jobs:
 
       # SCA - Trivy Filesystem Scan
       - name: Run Trivy filesystem scan
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.29.0
         with:
           scan-type: 'fs'
           scan-ref: '.'
@@ -153,14 +153,13 @@ jobs:
 
       # Container Security - Trivy Image Scan
       - name: Run Trivy container scan
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.29.0
         with:
           image-ref: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           format: 'sarif'
           output: 'trivy-image-results.sarif'
           severity: 'CRITICAL,HIGH'
           exit-code: '1'
-          skip-version-check: true
 
       - name: Upload Trivy image results
         uses: github/codeql-action/upload-sarif@v3
