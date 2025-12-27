@@ -12,8 +12,8 @@ public class VulnerableService
 {
     // Vulnerability 1: Hardcoded API Key (example pattern - not a real key)
     // CodeQL should detect this hardcoded secret
-    // Note: Using format that CodeQL detects but GitHub Push Protection allows
-    private const string API_KEY = "api_key_example_12345_NOT_REAL_SECRET_FOR_TESTING"; // pragma: allowlist secret
+    // Using format that CodeQL might detect but GitHub Push Protection allows
+    private const string API_KEY = "api_key_TEST_12345_NOT_REAL_SECRET_FOR_CODEQL_TESTING"; // pragma: allowlist secret
 
     // Vulnerability 2: Weak password validation
     public bool ValidatePassword(string password)
@@ -27,11 +27,12 @@ public class VulnerableService
     {
         // VULNERABLE: Direct string concatenation in SQL query
         // CodeQL should detect this SQL injection vulnerability
+        // Using string concatenation (not interpolation) so CodeQL can detect
         using var connection = new SqlConnection(_connectionString);
         connection.Open();
-        var query = $"SELECT * FROM Users WHERE Id = '{userId}'";
+        var query = "SELECT * FROM Users WHERE Id = '" + userId + "'"; // String concatenation
         using var command = new SqlCommand(query, connection);
-        // This is vulnerable to SQL injection
+        // This is vulnerable to SQL injection - CodeQL should detect this pattern
         return command.ExecuteScalar()?.ToString() ?? string.Empty;
     }
 
@@ -52,7 +53,7 @@ public class VulnerableService
 
     // Additional: Hardcoded credentials
     // CodeQL should detect these hardcoded secrets
-    // Note: Using format that CodeQL detects but GitHub Push Protection allows
-    private readonly string _dbPassword = "example_password_123_NOT_REAL"; // pragma: allowlist secret
-    private readonly string _connectionString = "Server=localhost;Database=SecureShop;User=sa;Password=ExamplePassword123!"; // pragma: allowlist secret
+    // Using format that CodeQL might detect but GitHub Push Protection allows
+    private readonly string _dbPassword = "test_password_123_NOT_REAL"; // pragma: allowlist secret
+    private readonly string _connectionString = "Server=localhost;Database=SecureShop;User=sa;Password=TestPassword123!"; // pragma: allowlist secret
 }
