@@ -35,6 +35,7 @@ builder.Services.AddSwaggerGen(c =>
 
 // Register application services
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<VulnerableService>(); // For security testing only
 
 // Add CORS (for development)
 builder.Services.AddCors(options =>

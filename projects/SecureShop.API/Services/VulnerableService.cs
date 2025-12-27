@@ -10,6 +10,7 @@ namespace SecureShop.API.Services;
 public class VulnerableService
 {
     // Vulnerability 1: Hardcoded API Key (example pattern - not a real key)
+    // CodeQL should detect this hardcoded secret (pragma only suppresses pre-commit hook)
     private const string API_KEY = "api_key_example_12345_not_real_secret"; // pragma: allowlist secret
 
     // Vulnerability 2: Weak password validation
@@ -44,6 +45,7 @@ public class VulnerableService
     }
 
     // Additional: Hardcoded credentials
+    // CodeQL should detect these hardcoded secrets (pragma only suppresses pre-commit hook)
     private readonly string _dbPassword = "admin123"; // pragma: allowlist secret
     private readonly string _connectionString = "Server=localhost;Database=SecureShop;User=sa;Password=Password123!"; // pragma: allowlist secret
 }
