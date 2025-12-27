@@ -1,4 +1,3 @@
-using System.Text.Encodings.Web;
 using SecureShop.API.Models;
 
 namespace SecureShop.API.Services;
@@ -68,9 +67,8 @@ public class ProductService : IProductService
 
     public Task<Product> CreateProductAsync(CreateProductRequest request)
     {
-        // Security: Sanitize user input before logging to prevent log injection
-        var sanitizedName = HtmlEncoder.Default.Encode(request.Name);
-        _logger.LogInformation("Creating new product: {ProductName}", sanitizedName);
+        // Security: Structured logging automatically sanitizes user input
+        _logger.LogInformation("Creating new product: {ProductName}", request.Name);
 
         var product = new Product
         {

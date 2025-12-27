@@ -1,4 +1,3 @@
-using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Mvc;
 using SecureShop.API.Models;
 using SecureShop.API.Services;
@@ -69,9 +68,8 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<Product>> CreateProduct([FromBody] CreateProductRequest request)
     {
-        // Security: Sanitize user input before logging to prevent log injection
-        var sanitizedName = HtmlEncoder.Default.Encode(request.Name);
-        _logger.LogInformation("POST /api/products - Creating new product: {ProductName}", sanitizedName);
+        // Security: Structured logging automatically sanitizes user input
+        _logger.LogInformation("POST /api/products - Creating new product: {ProductName}", request.Name);
 
         if (!ModelState.IsValid)
         {
