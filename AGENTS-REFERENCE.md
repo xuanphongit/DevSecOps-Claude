@@ -142,4 +142,3 @@ checkov -d .
 ---
 
 *Quick reference for all phases. See AGENTS.MD for Phase 1 specific rules.*
-

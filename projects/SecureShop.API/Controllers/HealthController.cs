@@ -23,7 +23,7 @@ public class HealthController : ControllerBase
     public IActionResult GetHealth()
     {
         _logger.LogInformation("GET /api/health - Health check requested");
-        
+
         var healthStatus = new HealthStatus
         {
             Status = "Healthy",
@@ -41,4 +41,3 @@ public class HealthStatus
     public DateTime Timestamp { get; set; }
     public string Version { get; set; } = string.Empty;
 }
-

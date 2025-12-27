@@ -9,4 +9,3 @@ public interface IProductService
     Task<Product> CreateProductAsync(CreateProductRequest request);
     Task<bool> DeleteProductAsync(int id);
 }
-

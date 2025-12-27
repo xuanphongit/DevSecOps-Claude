@@ -135,4 +135,3 @@ public class ProductsControllerTests
         result.Should().BeOfType<NotFoundObjectResult>();
     }
 }
-

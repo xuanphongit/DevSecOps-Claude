@@ -26,4 +26,3 @@ public class CreateProductRequest
     public int Stock { get; set; }
     public string Category { get; set; } = string.Empty;
 }
-

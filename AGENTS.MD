@@ -73,7 +73,7 @@ public class CreateProductRequest
     [Required]
     [StringLength(100, MinimumLength = 3)]
     public string Name { get; set; }
-    
+
     [Required]
     [Range(0.01, 999999.99)]
     public decimal Price { get; set; }
@@ -135,19 +135,19 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
-      
+
       - name: Restore
         run: dotnet restore
-      
+
       - name: Build
         run: dotnet build --no-restore
-      
+
       - name: Test
         run: dotnet test --no-build --collect:"XPlat Code Coverage"
-      
+
       - name: Build Docker Image
         run: docker build -t ${{ env.IMAGE_NAME }}:${{ github.sha }} .
-      
+
       - name: Trivy Scan
         uses: aquasecurity/trivy-action@master
         with:
@@ -239,6 +239,6 @@ For detailed templates and future phases, see:
 
 ---
 
-*Last Updated: December 26, 2024*  
-*Version: 3.0 - Phase 1 Focus*  
+*Last Updated: December 26, 2024*
+*Version: 3.0 - Phase 1 Focus*
 *Status: Active - Sprint 1, Week 1*

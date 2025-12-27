@@ -56,19 +56,19 @@ public class ProductService : IProductService
     {
         _logger.LogInformation("Retrieving product with ID: {ProductId}", id);
         var product = _products.FirstOrDefault(p => p.Id == id);
-        
+
         if (product == null)
         {
             _logger.LogWarning("Product with ID {ProductId} not found", id);
         }
-        
+
         return Task.FromResult(product);
     }
 
     public Task<Product> CreateProductAsync(CreateProductRequest request)
     {
         _logger.LogInformation("Creating new product: {ProductName}", request.Name);
-        
+
         var product = new Product
         {
             Id = _nextId++,
@@ -82,14 +82,14 @@ public class ProductService : IProductService
 
         _products.Add(product);
         _logger.LogInformation("Product created successfully with ID: {ProductId}", product.Id);
-        
+
         return Task.FromResult(product);
     }
 
     public Task<bool> DeleteProductAsync(int id)
     {
         _logger.LogInformation("Attempting to delete product with ID: {ProductId}", id);
-        
+
         var product = _products.FirstOrDefault(p => p.Id == id);
         if (product == null)
         {
@@ -99,8 +99,7 @@ public class ProductService : IProductService
 
         _products.Remove(product);
         _logger.LogInformation("Product with ID {ProductId} deleted successfully", id);
-        
+
         return Task.FromResult(true);
     }
 }
-

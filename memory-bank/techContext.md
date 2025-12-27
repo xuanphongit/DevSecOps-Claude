@@ -239,7 +239,3 @@ uses: aquasecurity/trivy-action@master
 
 **Created**: December 26, 2024  
 **Last Updated**: December 26, 2024
-
-
-
-

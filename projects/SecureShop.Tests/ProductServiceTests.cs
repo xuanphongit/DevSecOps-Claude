@@ -100,7 +100,7 @@ public class ProductServiceTests
 
         // Assert
         result.Should().BeTrue();
-        
+
         // Verify product is deleted
         var deletedProduct = await _service.GetProductByIdAsync(product.Id);
         deletedProduct.Should().BeNull();
@@ -116,4 +116,3 @@ public class ProductServiceTests
         result.Should().BeFalse();
     }
 }
-

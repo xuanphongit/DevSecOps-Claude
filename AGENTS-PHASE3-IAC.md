@@ -160,4 +160,3 @@ resource "azurerm_network_security_group" "main" {
 ---
 
 *This file is for Phase 3 reference. Current focus: Phase 1 (CI/CD Security)*
-

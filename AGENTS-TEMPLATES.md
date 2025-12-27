@@ -285,4 +285,3 @@ jobs:
 
 *See AGENTS-PHASE2-AKS.md for detailed Kubernetes patterns*  
 *See AGENTS-PHASE3-IAC.md for detailed Terraform patterns*
-

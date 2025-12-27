@@ -46,7 +46,7 @@ public class ProductsController : ControllerBase
     {
         _logger.LogInformation("GET /api/products/{ProductId} - Retrieving product", id);
         var product = await _productService.GetProductByIdAsync(id);
-        
+
         if (product == null)
         {
             _logger.LogWarning("Product with ID {ProductId} not found", id);
@@ -69,7 +69,7 @@ public class ProductsController : ControllerBase
     public async Task<ActionResult<Product>> CreateProduct([FromBody] CreateProductRequest request)
     {
         _logger.LogInformation("POST /api/products - Creating new product: {ProductName}", request.Name);
-        
+
         if (!ModelState.IsValid)
         {
             _logger.LogWarning("Invalid model state for product creation");
@@ -78,7 +78,7 @@ public class ProductsController : ControllerBase
 
         var product = await _productService.CreateProductAsync(request);
         _logger.LogInformation("Product created successfully with ID: {ProductId}", product.Id);
-        
+
         return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
     }
 
@@ -96,7 +96,7 @@ public class ProductsController : ControllerBase
     {
         _logger.LogInformation("DELETE /api/products/{ProductId} - Deleting product", id);
         var deleted = await _productService.DeleteProductAsync(id);
-        
+
         if (!deleted)
         {
             _logger.LogWarning("Product with ID {ProductId} not found for deletion", id);
@@ -106,4 +106,3 @@ public class ProductsController : ControllerBase
         return NoContent();
     }
 }
-

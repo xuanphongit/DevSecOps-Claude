@@ -24,7 +24,7 @@ public class MetricsController : ControllerBase
     public IActionResult GetMetrics()
     {
         _logger.LogInformation("GET /api/metrics - Metrics requested");
-        
+
         var process = Process.GetCurrentProcess();
         var metrics = new ApplicationMetrics
         {
@@ -47,4 +47,3 @@ public class ApplicationMetrics
     public TimeSpan CpuTime { get; set; }
     public DateTime Timestamp { get; set; }
 }
-

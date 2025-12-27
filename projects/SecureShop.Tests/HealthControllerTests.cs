@@ -27,10 +27,9 @@ public class HealthControllerTests
         result.Should().BeOfType<OkObjectResult>();
         var okResult = result as OkObjectResult;
         okResult!.Value.Should().BeOfType<HealthStatus>();
-        
+
         var healthStatus = okResult.Value as HealthStatus;
         healthStatus!.Status.Should().Be("Healthy");
         healthStatus.Version.Should().NotBeNullOrEmpty();
     }
 }
-
