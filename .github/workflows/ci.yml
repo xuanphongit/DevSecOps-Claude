@@ -151,6 +151,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image
+        id: build
         uses: docker/build-push-action@v6
         with:
           context: ./projects
@@ -160,6 +161,13 @@ jobs:
             ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+          outputs: type=docker,dest=/tmp/image.tar
+
+      - name: Load image to Docker
+        run: |
+          docker load -i /tmp/image.tar
+          IMAGE_TAG="${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
+          docker tag $IMAGE_TAG ${{ env.IMAGE_NAME }}:local
 
       - name: Move cache
         run: |
@@ -170,7 +178,7 @@ jobs:
       - name: Run Trivy container scan
         uses: aquasecurity/trivy-action@0.29.0
         with:
-          image-ref: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          image-ref: ${{ env.IMAGE_NAME }}:local
           format: 'sarif'
           output: 'trivy-image-results.sarif'
           severity: 'CRITICAL,HIGH'
