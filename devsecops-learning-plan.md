@@ -134,6 +134,58 @@ stages:
 
 ---
 
+##### **Task 1.4: Add Security Scanning (SAST, SCA, Secrets)** ✅
+**Context**: Tích hợp các công cụ security scanning vào CI pipeline để phát hiện vulnerabilities sớm.
+
+**Sub-tasks**:
+- [x] Add CodeQL (SAST) to pipeline ✅
+  - Configure for C# (security-extended queries)
+  - Upload results to GitHub Security tab
+- [x] Add Trivy filesystem scan (SCA) ✅
+  - Scan dependencies (NuGet packages)
+  - Fail on CRITICAL/HIGH vulnerabilities
+  - Upload SARIF results
+- [x] Add Trivy container image scan ✅
+  - Scan local image before push
+  - Table format for visibility
+  - SARIF format for GitHub Security tab
+  - Fail on CRITICAL/HIGH
+- [x] Add TruffleHog secret scanning ✅
+  - PR: Diff scan (base vs head)
+  - Push: Full repo scan
+  - Only verified secrets
+  - Explicit security gates
+- [x] Configure security gates ✅
+  - Trivy FS: exit-code 1 on CRITICAL/HIGH
+  - Trivy Image: Security gate check
+  - TruffleHog: Fail if secrets detected
+- [x] Test all security scans in pipeline ✅
+
+**Acceptance Criteria**:
+- ✅ CodeQL scan runs on every push/PR
+- ✅ Trivy scans dependencies and images
+- ✅ Secret scanning detects secrets (PR diff + Push full)
+- ✅ Pipeline fails if critical issues found
+- ✅ Security results visible in GitHub Security tab
+- ✅ Images only pushed to GHCR after merge to master
+
+**Estimated Time**: 6-8 hours  
+**Dependencies**: Task 1.3
+
+**Security Tools Implemented**:
+- **SAST**: CodeQL (GitHub Advanced Security)
+- **SCA**: Trivy filesystem scan
+- **Container**: Trivy image scan
+- **Secrets**: TruffleHog
+
+**Resources**:
+- [CodeQL Documentation](https://codeql.github.com/docs/)
+- [Trivy Documentation](https://aquasecurity.github.io/trivy/)
+- [TruffleHog Documentation](https://github.com/trufflesecurity/trufflehog)
+- See `SECURITY-IMPLEMENTATION-SUMMARY.md` for detailed documentation
+
+---
+
 #### **WEEK 2: Security Scanning Integration**
 
 ##### **Task 2.1: Implement SAST (Static Application Security Testing)**
@@ -804,6 +856,7 @@ Preview of Sprint 2 tasks:
 
 **Progress**:
 - Week 1: ✅ Complete (Task 1.1, 1.2, 1.3)
-- Week 2: 🟡 In Progress (Task 1.4 - Security Scanning)
+- Week 1: ✅ Complete (Task 1.1, 1.2, 1.3, 1.4)
+- Week 2: ⏳ Pending (Task 2.1, 2.2, 2.3)
 - Week 3: ⏳ Pending
 - Week 4: ⏳ Pending

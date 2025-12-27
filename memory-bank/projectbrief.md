@@ -31,7 +31,7 @@ Chuyển đổi từ **DevOps Engineer** → **Senior DevSecOps / Azure Security
 
 | Phase | Focus Area | Duration | Status |
 |-------|-----------|----------|--------|
-| 1 | DevSecOps Foundation (CI/CD Security) | 1-3 tháng | 🟡 In Progress |
+| 1 | DevSecOps Foundation (CI/CD Security) | 1-3 tháng | 🟡 In Progress (Week 1 ✅) |
 | 2 | Azure Kubernetes Security | 3-9 tháng | 📅 Planned |
 | 3 | IaC Security & Policy as Code | 3-12 tháng | 📅 Planned |
 | 4 | Supply Chain & Zero Trust | 9-18 tháng | 📅 Planned |
@@ -39,10 +39,11 @@ Chuyển đổi từ **DevOps Engineer** → **Senior DevSecOps / Azure Security
 
 ### Key Projects
 
-1. **SecureShop API Platform** (Phase 1)
-   - .NET 8 Web API với full security automation
-   - CI/CD pipeline với security scanning
-   - Container security & SBOM
+1. **SecureShop API Platform** (Phase 1) 🟡 In Progress
+   - ✅ .NET 8 Web API created
+   - ✅ CI/CD pipeline with security scanning (CodeQL, Trivy, TruffleHog)
+   - ✅ Container security scanning implemented
+   - ⏳ SBOM generation (Week 4)
 
 2. **AKS Secure Platform** (Phase 2)
    - AKS security baseline
@@ -145,5 +146,6 @@ DevSecOps-Claude/
 ---
 
 **Created**: December 26, 2024  
-**Last Updated**: December 26, 2024  
-**Version**: 1.0
+**Last Updated**: December 27, 2024  
+**Version**: 1.1  
+**Progress**: Week 1 Complete (4/4 tasks) ✅

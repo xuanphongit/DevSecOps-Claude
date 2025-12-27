@@ -104,6 +104,7 @@ jobs:
           format: 'sarif'
           output: 'trivy-fs-results.sarif'
           severity: 'CRITICAL,HIGH'
+          exit-code: '1'  # Fail pipeline on CRITICAL/HIGH vulnerabilities
 
       - name: Upload Trivy results
         uses: github/codeql-action/upload-sarif@v4
@@ -113,6 +114,7 @@ jobs:
 
       # Secret Scanning - TruffleHog (PR: diff scan)
       - name: Run TruffleHog secret scan (PR)
+        id: trufflehog-pr
         if: github.event_name == 'pull_request'
         uses: trufflesecurity/trufflehog@main
         with:
@@ -121,19 +123,41 @@ jobs:
           head: ${{ github.event.pull_request.head.sha }}
           extra_args: --only-verified
 
+      - name: Fail if secrets found (PR)
+        if: |
+          github.event_name == 'pull_request' &&
+          steps.trufflehog-pr.outcome == 'failure'
+        run: |
+          echo "❌ Security Gate: FAILED"
+          echo "Secrets detected in pull request"
+          echo "Please review the TruffleHog scan results above"
+          exit 1
+
       # Secret Scanning - TruffleHog (Push: full repo scan)
       - name: Run TruffleHog full repo scan (Push)
+        id: trufflehog-push
         if: github.event_name == 'push'
         uses: trufflesecurity/trufflehog@main
         with:
           path: ./
           extra_args: --only-verified
 
+      - name: Fail if secrets found (Push)
+        if: |
+          github.event_name == 'push' &&
+          steps.trufflehog-push.outcome == 'failure'
+        run: |
+          echo "❌ Security Gate: FAILED"
+          echo "Secrets detected in repository"
+          echo "Please review the TruffleHog scan results above"
+          exit 1
+
   build-docker-image:
     name: Build Docker Image
     runs-on: ubuntu-latest
     needs: build-and-test
     timeout-minutes: 15
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
     permissions:
       contents: read
       packages: write
@@ -150,7 +174,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          key: >-
+            ${{ runner.os }}-buildx-${{ hashFiles('projects/SecureShop.API/Dockerfile',
+            'projects/SecureShop.API/**/*.csproj') }}
           restore-keys: |
             ${{ runner.os }}-buildx-
 
@@ -186,6 +212,7 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
       # Container Security - Trivy Image Scan (scan local image before push)
+      # First scan: Table format for visibility, fails on CRITICAL/HIGH vulnerabilities
       - name: Run Trivy container scan
         id: trivy-scan
         continue-on-error: true
@@ -194,17 +221,18 @@ jobs:
           image-ref: ${{ env.IMAGE_NAME }}:local
           format: 'table'
           severity: 'CRITICAL,HIGH'
-          exit-code: '0'  # Don't fail yet, we'll check output
+          exit-code: '1'  # Fail on CRITICAL/HIGH vulnerabilities
 
+      # Second scan: SARIF format for GitHub Security tab (always succeeds to upload results)
       - name: Run Trivy container scan (SARIF)
-        if: steps.trivy-scan.outcome == 'success' || steps.trivy-scan.outcome == 'failure'
+        if: always()
         uses: aquasecurity/trivy-action@0.29.0
         with:
           image-ref: ${{ env.IMAGE_NAME }}:local
           format: 'sarif'
           output: 'trivy-image-results.sarif'
           severity: 'CRITICAL,HIGH'
-          exit-code: '0'  # Upload SARIF even if vulnerabilities found
+          exit-code: '0'  # Don't fail here, we need to upload SARIF for visibility
 
       - name: Upload Trivy image results
         uses: github/codeql-action/upload-sarif@v4
@@ -221,13 +249,34 @@ jobs:
           echo "Please review the Trivy scan results above"
           exit 1
 
-      # Only push if scan passes (security gate)
+      # Only push to GHCR on push to master (after merge), not on PR
       - name: Push Docker image to GHCR
-        if: steps.trivy-scan.outcome == 'success'
-        run: |
-          docker push ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        if: |
+          github.event_name == 'push' &&
+          (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main') &&
+          steps.trivy-scan.outcome == 'success'
+        uses: docker/build-push-action@v6
+        with:
+          context: ./projects
+          file: ./projects/SecureShop.API/Dockerfile
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          cache-from: type=local,src=/tmp/.buildx-cache
 
+      # Info message for PR (no push)
+      - name: PR scan complete (no push)
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "✅ Security scan completed on PR"
+          echo "Image will be pushed to GHCR after merge to master"
+
+      # Info message for push to master
       - name: Image digest
+        if: |
+          github.event_name == 'push' &&
+          (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main') &&
+          steps.trivy-scan.outcome == 'success'
         run: |
           IMAGE_TAG="${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
           echo "Image pushed to $IMAGE_TAG"
