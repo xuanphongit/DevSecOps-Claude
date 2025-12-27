@@ -4,6 +4,11 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Version>1.0.0</Version>
+    <Authors>DevSecOps Learning Journey</Authors>
+    <Company>SecureShop</Company>
+    <Product>SecureShop API</Product>
+    <Description>Secure e-commerce API for DevSecOps learning journey</Description>
   </PropertyGroup>
 
   <ItemGroup>
