@@ -25,18 +25,63 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
+      - name: List files in root
+        run: |
+          echo "=== Root directory contents ==="
+          ls -la
+          echo ""
+          echo "=== Solution files ==="
+          find . -name "*.sln" -type f
+          echo ""
+          echo "=== Projects directory ==="
+          ls -la projects/ || echo "Projects directory not found"
+
       - name: Restore dependencies
-        run: dotnet restore "DevSecOps Claude.sln"
+        run: |
+          echo "=== Attempting to restore solution ==="
+          if [ -f "DevSecOps Claude.sln" ]; then
+            echo "Solution file found: DevSecOps Claude.sln"
+            dotnet restore "DevSecOps Claude.sln"
+          elif [ -f "DevSecOps-Claude.sln" ]; then
+            echo "Solution file found: DevSecOps-Claude.sln"
+            dotnet restore "DevSecOps-Claude.sln"
+          else
+            echo "=== Solution file not found, trying to restore from projects ==="
+            dotnet restore projects/SecureShop.API/SecureShop.API.csproj
+            dotnet restore projects/SecureShop.Tests/SecureShop.Tests.csproj
+          fi
 
       - name: Build application
-        run: dotnet build "DevSecOps Claude.sln" --no-restore -c Release
+        run: |
+          echo "=== Building application ==="
+          if [ -f "DevSecOps Claude.sln" ]; then
+            dotnet build "DevSecOps Claude.sln" --no-restore -c Release
+          elif [ -f "DevSecOps-Claude.sln" ]; then
+            dotnet build "DevSecOps-Claude.sln" --no-restore -c Release
+          else
+            dotnet build projects/SecureShop.API/SecureShop.API.csproj --no-restore -c Release
+            dotnet build projects/SecureShop.Tests/SecureShop.Tests.csproj --no-restore -c Release
+          fi
 
       - name: Run unit tests
         run: |
-          dotnet test "DevSecOps Claude.sln" \
-            --no-build -c Release \
-            --collect:"XPlat Code Coverage" \
-            --results-directory ./TestResults
+          echo "=== Running unit tests ==="
+          if [ -f "DevSecOps Claude.sln" ]; then
+            dotnet test "DevSecOps Claude.sln" \
+              --no-build -c Release \
+              --collect:"XPlat Code Coverage" \
+              --results-directory ./TestResults
+          elif [ -f "DevSecOps-Claude.sln" ]; then
+            dotnet test "DevSecOps-Claude.sln" \
+              --no-build -c Release \
+              --collect:"XPlat Code Coverage" \
+              --results-directory ./TestResults
+          else
+            dotnet test projects/SecureShop.Tests/SecureShop.Tests.csproj \
+              --no-build -c Release \
+              --collect:"XPlat Code Coverage" \
+              --results-directory ./TestResults
+          fi
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
