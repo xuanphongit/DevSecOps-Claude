@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SecureShop.API.Models;
 using SecureShop.API.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SecureShop.API.Controllers;
 
@@ -90,6 +91,7 @@ public class ProductsController : ControllerBase
     /// <response code="204">Product deleted successfully</response>
     /// <response code="404">Product not found</response>
     [HttpDelete("{id}")]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteProduct(int id)
