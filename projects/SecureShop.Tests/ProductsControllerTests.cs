@@ -64,7 +64,7 @@ public class ProductsControllerTests
     {
         // Arrange
         _productServiceMock.Setup(x => x.GetProductByIdAsync(999))
-            .ReturnsAsync(null!);
+            .ReturnsAsync((Product)null!);
 
         // Act
         var result = await _controller.GetProduct(999);
