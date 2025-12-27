@@ -64,7 +64,7 @@ public class ProductsControllerTests
     {
         // Arrange
         _productServiceMock.Setup(x => x.GetProductByIdAsync(999))
-            .ReturnsAsync((Product?)null);
+            .ReturnsAsync((Product)null!);
 
         // Act
         var result = await _controller.GetProduct(999);
@@ -111,6 +111,9 @@ public class ProductsControllerTests
     public async Task DeleteProduct_WithValidId_ShouldReturnNoContent()
     {
         // Arrange
+        var product = new Product { Id = 1, Name = "Product 1", Price = 10.00m };
+        _productServiceMock.Setup(x => x.GetProductByIdAsync(1))
+            .ReturnsAsync(product);
         _productServiceMock.Setup(x => x.DeleteProductAsync(1))
             .ReturnsAsync(true);
 
