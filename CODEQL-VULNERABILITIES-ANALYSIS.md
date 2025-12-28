@@ -159,13 +159,22 @@ CodeQL đã detect được:
 2. **Hardcoded Secrets**: Dùng patterns CodeQL nhận diện được
 3. **Insecure Random**: Đảm bảo có context sử dụng
 
-### Option 2: Custom CodeQL Queries
+### Option 2: Sử dụng Built-in CodeQL Queries (Best Practice)
 
-Tạo custom queries trong `.github/codeql/csharp-queries.qls`
+**Không nên tạo custom queries** cho các patterns phổ biến như SQL injection và hardcoded secrets vì:
+- CodeQL đã có built-in queries: `cs/sql-injection`, `cs/hardcoded-credential`
+- Built-in queries được maintain bởi GitHub Security Lab, tested và optimized
+- Custom queries chỉ nên dùng cho patterns **rất cụ thể** của project, không generic
+- Custom queries khó maintain và có thể có false positives/negatives
+
+**Best Practice**:
+- ✅ Dùng `+security-and-quality,security-extended` (built-in queries)
+- ✅ Nếu cần, dùng queries từ [CodeQL Community Packs](https://github.com/github/codeql/tree/main/csharp/ql/src/Security/CWE)
+- ❌ Tránh tự viết custom queries trừ khi thực sự cần cho patterns rất cụ thể
 
 ### Option 3: Sử dụng SonarQube/SonarCloud
 
-SonarCloud có nhiều rules hơn cho các patterns này
+SonarCloud có nhiều rules hơn cho các patterns này và có thể bổ sung cho CodeQL
 
 ---
 

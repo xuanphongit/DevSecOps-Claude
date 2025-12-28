@@ -1,9 +1,0 @@
-# CodeQL Query Suite for Custom Security Queries
-# This file defines custom CodeQL queries to detect vulnerabilities
-
-# Import standard security queries
-- import: codeql-suites/csharp-security-extended.qls
-
-# Custom queries
-- queries: .github/codeql/queries/sql-injection-concatenation.ql
-- queries: .github/codeql/queries/hardcoded-secrets-custom.ql
