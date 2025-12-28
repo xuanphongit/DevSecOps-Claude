@@ -1,3 +1,4 @@
+using Microsoft.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -10,7 +11,9 @@ namespace SecureShop.API.Services;
 public class VulnerableService
 {
     // Vulnerability 1: Hardcoded API Key (example pattern - not a real key)
-    private const string API_KEY = "api_key_example_12345_not_real_secret"; // pragma: allowlist secret
+    // CodeQL should detect this hardcoded secret
+    // Using format that CodeQL might detect but GitHub Push Protection allows
+    private const string API_KEY = "api_key_TEST_12345_NOT_REAL_SECRET_FOR_CODEQL_TESTING"; // pragma: allowlist secret
 
     // Vulnerability 2: Weak password validation
     public bool ValidatePassword(string password)
@@ -23,9 +26,14 @@ public class VulnerableService
     public string GetUserData(string userId)
     {
         // VULNERABLE: Direct string concatenation in SQL query
-        var query = $"SELECT * FROM Users WHERE Id = '{userId}'";
-        // In real scenario, this would execute against database
-        return query;
+        // CodeQL should detect this SQL injection vulnerability
+        // Using string concatenation (not interpolation) so CodeQL can detect
+        using var connection = new SqlConnection(_connectionString);
+        connection.Open();
+        var query = "SELECT * FROM Users WHERE Id = '" + userId + "'"; // String concatenation
+        using var command = new SqlCommand(query, connection);
+        // This is vulnerable to SQL injection - CodeQL should detect this pattern
+        return command.ExecuteScalar()?.ToString() ?? string.Empty;
     }
 
     // Vulnerability 4: Missing input validation
@@ -44,6 +52,8 @@ public class VulnerableService
     }
 
     // Additional: Hardcoded credentials
-    private readonly string _dbPassword = "admin123"; // pragma: allowlist secret
-    private readonly string _connectionString = "Server=localhost;Database=SecureShop;User=sa;Password=Password123!"; // pragma: allowlist secret
+    // CodeQL should detect these hardcoded secrets
+    // Using format that CodeQL might detect but GitHub Push Protection allows
+    private readonly string _dbPassword = "test_password_123_NOT_REAL"; // pragma: allowlist secret
+    private readonly string _connectionString = "Server=localhost;Database=SecureShop;User=sa;Password=TestPassword123!"; // pragma: allowlist secret
 }
