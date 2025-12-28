@@ -1,5 +1,6 @@
 # Build stage
-FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
+# Update base image to latest Alpine to fix CVE-2024-58251
+FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine3.22 AS build
 WORKDIR /src
 
 # Copy csproj and restore dependencies
@@ -17,7 +18,8 @@ RUN dotnet publish "SecureShop.API.csproj" -c Release -o /app/publish \
     -p:PublishTrimmed=true
 
 # Runtime stage
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS final
+# Update base image to latest Alpine to fix CVE-2024-58251
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine3.22 AS final
 WORKDIR /app
 
 # Create non-root user

@@ -101,7 +101,7 @@ jobs:
         uses: github/codeql-action/init@v4
         with:
           languages: csharp
-          queries: +security-and-quality,security-extended
+          queries: +security-and-quality,security-extended,.github/codeql/csharp-queries.qls
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@v4
